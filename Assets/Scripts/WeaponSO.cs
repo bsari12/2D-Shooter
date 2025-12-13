@@ -13,5 +13,6 @@ public class WeaponSO : ScriptableObject
     public float bloom;
     public float fireRate;
     public int magSize;
+    public float screenShakeIntensity;
 
 }

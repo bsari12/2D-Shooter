@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     public GameObject bulletPrefab;
     public GameObject armObj;
     public SpriteRenderer heldGunSpriteRenderer;
+    public GameObject muzzleFlash;
 
     public AudioClip hitSFX;
     public AudioClip footStepSFX;
@@ -40,6 +41,7 @@ public class Player : MonoBehaviour
         HandleShooting();
         HandleWeaponEquip();
         HandleReloading();
+        HandleDropping();
     }
 
     void FixedUpdate()
@@ -133,8 +135,19 @@ public class Player : MonoBehaviour
                 Quaternion bulletRotation = baseRotation*Quaternion.Euler(0,0,spreadAngle);
 
                 AudioManager.instance.PlaySFX(weaponHeld.shootingSound,0.2f);
+                Object.FindFirstObjectByType<ScreenShake>().Shake(weaponHeld.screenShakeIntensity,weaponHeld.screenShakeIntensity,0.1f);
 
                 Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletRotation);
+                Transform muzzleFlashTransform = Instantiate(muzzleFlash, bulletSpawnPoint.position, bulletRotation, bulletSpawnPoint).transform;
+
+                if(weaponHeld.name == "Ak-47")
+                {
+                    muzzleFlashTransform.localPosition = new Vector2(1f,muzzleFlashTransform.localPosition.y);
+                }
+                else
+                {
+                    muzzleFlashTransform.localPosition = new Vector2(0.1f,muzzleFlashTransform.localPosition.y);
+                }
 
                 currentAmmo--;
             }
@@ -184,5 +197,29 @@ public class Player : MonoBehaviour
         reloading = false;
 
     }
+    public void PickUpWeapon(WeaponSO weaponSO)
+    {
+        DropGun();
+        weaponHeld = weaponSO;
+        currentAmmo = weaponHeld.magSize;
+        heldGunSpriteRenderer.sprite =weaponHeld.gunTopDownViewSprite;
+    }
+    void DropGun()
+    {
+        if(weaponHeld != null)
+        {
+            Instantiate(weaponHeld.groundWeaponPrefab, transform.position, transform.rotation);
+            weaponHeld = null;
+            armObj.SetActive(false);
+            weaponEquipped = false;
 
+        }
+    }
+    void HandleDropping()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            DropGun();
+        }
+    }
 }
