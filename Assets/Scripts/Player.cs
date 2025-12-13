@@ -1,18 +1,188 @@
+using System.Collections;
 using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public WeaponSO weaponHeld;
+    public bool weaponEquipped;
+    public bool reloading;
+    public int currentAmmo;
+
     public float moveSpeed;
+    public float health =100f;
+    public GameObject deadPlayerPrefab;
+    public Transform bulletSpawnPoint;
+    public GameObject bulletPrefab;
+    public GameObject armObj;
+    public SpriteRenderer heldGunSpriteRenderer;
+
+    public AudioClip hitSFX;
+    public AudioClip footStepSFX;
+    public AudioClip reloadSFX;
+
     private Rigidbody2D rb;
+    private SpriteRenderer spriteRenderer;
+
+    private Vector2 moveVelocity;
+    private float nextFireTime = 0f;
 
     void Start()
     {
-        rb.GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
+        spriteRenderer =GetComponent<SpriteRenderer>();
+        StartCoroutine(PlayFootsteps());
     }
 
     void Update()
     {
+        HandleMovement();
+        HandleShooting();
+        HandleWeaponEquip();
+        HandleReloading();
+    }
+
+    void FixedUpdate()
+    {
+        rb.linearVelocity = moveVelocity;
+        HandleRotation();
+    }
+
+
+    void HandleMovement()
+    {
+        float moveX = Input.GetAxisRaw("Horizontal");
+        float moveY = Input.GetAxisRaw("Vertical");
+
+        if (weaponHeld && weaponEquipped)
+        {
+            moveVelocity = new Vector2(moveX, moveY).normalized * moveSpeed * weaponHeld.moveSpeed;
+        }
+        else
+        {
+            moveVelocity = new Vector2(moveX,moveY).normalized*moveSpeed;
+        }
         
     }
+
+    void HandleRotation()
+    {
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 direction = (mouseWorldPos - transform.position);
+        direction.Normalize();
+
+        float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        rb.rotation = targetAngle;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "Damage")
+        {
+            health -=10;
+            AudioManager.instance.PlaySFX(hitSFX);
+            StartCoroutine(BlinkRed());
+
+            if (health <= 0)
+            {
+                Die();
+            }
+        }
+    }
+    void Die()
+    {
+        if(!this.enabled) return;
+        spriteRenderer.enabled = false;
+        armObj.SetActive(false);
+        rb.linearVelocity =Vector2.zero;
+        Instantiate(deadPlayerPrefab, transform.position, transform.rotation);
+        this.enabled = false;
+    }
+    IEnumerator BlinkRed()
+    {
+        spriteRenderer.color =Color.red;
+        yield return new WaitForSeconds(0.1f);
+        spriteRenderer.color = Color.white;
+    }
+
+    IEnumerator PlayFootsteps()
+    {
+        while (true)
+        {
+            if (moveVelocity.magnitude > 0.1f)
+            {
+                AudioManager.instance.PlaySFX(footStepSFX);
+            }
+            if (health <= 0)
+            {
+                break;
+            }
+            yield return new WaitForSeconds(0.35f);
+        }
+    }
+    void HandleShooting()
+    {
+        if (Input.GetMouseButton(0) && weaponEquipped)
+        {
+            if(Time.time >= nextFireTime && currentAmmo > 0)
+            {
+                nextFireTime = Time.time +weaponHeld.fireRate;
+
+                Quaternion baseRotation =transform.rotation;
+                float spreadAngle = Random.Range(-weaponHeld.bloom*20f, weaponHeld.bloom*20f);
+                Quaternion bulletRotation = baseRotation*Quaternion.Euler(0,0,spreadAngle);
+
+                AudioManager.instance.PlaySFX(weaponHeld.shootingSound,0.2f);
+
+                Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletRotation);
+
+                currentAmmo--;
+            }
+            
+        }
+    }
+
+    void HandleWeaponEquip()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            weaponEquipped = !weaponEquipped;
+            if(weaponEquipped && weaponHeld != null)
+            {
+                armObj.SetActive(true);
+                heldGunSpriteRenderer.sprite =weaponHeld.gunTopDownViewSprite;
+            }
+            else
+            {
+                armObj.SetActive(false);
+                weaponEquipped = false;
+            }
+        }
+    }
+    void HandleReloading()
+    {
+        if(weaponEquipped && Input.GetKeyDown(KeyCode.R) && !reloading)
+        {
+            if(currentAmmo < weaponHeld.magSize)
+            {
+                StartCoroutine(ReloadRoutine());
+            }
+        }
+    }
+
+    IEnumerator ReloadRoutine() 
+    {
+        reloading = true;
+
+        Animator armsAnim = armObj.GetComponent<Animator>();
+        armsAnim.Play("Arms_Reloading");
+        AudioManager.instance.PlaySFX(reloadSFX);
+        yield return new WaitForSeconds(0.8f);
+
+        currentAmmo = weaponHeld.magSize;
+        armsAnim.Play("Arms_NotReloading");
+        reloading = false;
+
+    }
+
 }
