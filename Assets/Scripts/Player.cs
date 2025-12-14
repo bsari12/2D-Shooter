@@ -113,7 +113,7 @@ public class Player : MonoBehaviour
         {
             if (moveVelocity.magnitude > 0.1f)
             {
-                AudioManager.instance.PlaySFX(footStepSFX);
+                AudioManager.instance.PlaySFX(footStepSFX, 0.5f);
             }
             if (health <= 0)
             {
@@ -189,7 +189,7 @@ public class Player : MonoBehaviour
 
         Animator armsAnim = armObj.GetComponent<Animator>();
         armsAnim.Play("Arms_Reloading");
-        AudioManager.instance.PlaySFX(reloadSFX);
+        AudioManager.instance.PlaySFX(reloadSFX,0.35f);
         yield return new WaitForSeconds(0.8f);
 
         currentAmmo = weaponHeld.magSize;
