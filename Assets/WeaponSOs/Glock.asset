@@ -19,5 +19,5 @@ MonoBehaviour:
   moveSpeed: 0.9
   bloom: 0.5
   fireRate: 0.3
-  magSize: 9
+  magSize: 6
   screenShakeIntensity: 1.5

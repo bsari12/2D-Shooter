@@ -82,7 +82,7 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
-
+        player.GetComponent<Player>().kills +=1;
         Instantiate(deadEnemyPrefab, transform.position, transform.rotation);
         Destroy(gameObject);
     }

@@ -12,6 +12,10 @@ public class Player : MonoBehaviour
     public bool reloading;
     public int currentAmmo;
 
+    public int killsToWin = 2;
+    public int kills;
+
+
     public float moveSpeed;
     public float health =100f;
     public GameObject deadPlayerPrefab;
@@ -29,6 +33,8 @@ public class Player : MonoBehaviour
     public Image healthBarImage;
     private TextMeshProUGUI ammoText;
     private GameObject deathUI;
+    private GameObject winUI;
+
 
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
@@ -45,6 +51,7 @@ public class Player : MonoBehaviour
         healthBarImage =GameObject.FindWithTag("PlayerHealth").GetComponent<Image>();
         ammoText =GameObject.FindWithTag("AmmoTxt").GetComponent<TextMeshProUGUI>();
         deathUI =GameObject.FindWithTag("DeathUI");
+        winUI =GameObject.FindWithTag("WinUI");
         UpdateAmmoUI();
     }
 
@@ -55,6 +62,7 @@ public class Player : MonoBehaviour
         HandleWeaponEquip();
         HandleReloading();
         HandleDropping();
+        HandleWinning();
     }
 
     void FixedUpdate()
@@ -258,6 +266,14 @@ public class Player : MonoBehaviour
         else
         {
             ammoText.gameObject.SetActive(false);
+        }
+    }
+    void HandleWinning()
+    {
+        if(kills >= killsToWin)
+        {
+            winUI.transform.GetChild(0).gameObject.SetActive(true);
+            Time.timeScale = 0;
         }
     }
 }
