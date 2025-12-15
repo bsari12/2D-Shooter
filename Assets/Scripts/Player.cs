@@ -1,6 +1,9 @@
 using System.Collections;
 using UnityEditor.Callbacks;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
 
 public class Player : MonoBehaviour
 {
@@ -17,10 +20,15 @@ public class Player : MonoBehaviour
     public GameObject armObj;
     public SpriteRenderer heldGunSpriteRenderer;
     public GameObject muzzleFlash;
+    public Gradient healthGradient;
+
 
     public AudioClip hitSFX;
     public AudioClip footStepSFX;
     public AudioClip reloadSFX;
+    public Image healthBarImage;
+    private TextMeshProUGUI ammoText;
+    private GameObject deathUI;
 
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
@@ -33,6 +41,11 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer =GetComponent<SpriteRenderer>();
         StartCoroutine(PlayFootsteps());
+
+        healthBarImage =GameObject.FindWithTag("PlayerHealth").GetComponent<Image>();
+        ammoText =GameObject.FindWithTag("AmmoTxt").GetComponent<TextMeshProUGUI>();
+        deathUI =GameObject.FindWithTag("DeathUI");
+        UpdateAmmoUI();
     }
 
     void Update()
@@ -82,6 +95,7 @@ public class Player : MonoBehaviour
         if(collision.gameObject.tag == "Damage")
         {
             health -=10;
+            UpdateHealthUI();
             AudioManager.instance.PlaySFX(hitSFX);
             StartCoroutine(BlinkRed());
 
@@ -94,6 +108,7 @@ public class Player : MonoBehaviour
     void Die()
     {
         if(!this.enabled) return;
+        deathUI.transform.GetChild(0).gameObject.SetActive(true);
         spriteRenderer.enabled = false;
         armObj.SetActive(false);
         rb.linearVelocity =Vector2.zero;
@@ -150,6 +165,7 @@ public class Player : MonoBehaviour
                 }
 
                 currentAmmo--;
+                UpdateAmmoUI();
             }
             
         }
@@ -164,11 +180,13 @@ public class Player : MonoBehaviour
             {
                 armObj.SetActive(true);
                 heldGunSpriteRenderer.sprite =weaponHeld.gunTopDownViewSprite;
+                UpdateAmmoUI();
             }
             else
             {
                 armObj.SetActive(false);
                 weaponEquipped = false;
+                UpdateAmmoUI();
             }
         }
     }
@@ -193,6 +211,7 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(0.8f);
 
         currentAmmo = weaponHeld.magSize;
+        UpdateAmmoUI();
         armsAnim.Play("Arms_NotReloading");
         reloading = false;
 
@@ -212,7 +231,7 @@ public class Player : MonoBehaviour
             weaponHeld = null;
             armObj.SetActive(false);
             weaponEquipped = false;
-
+            UpdateAmmoUI();
         }
     }
     void HandleDropping()
@@ -220,6 +239,25 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             DropGun();
+        }
+    }
+
+    void UpdateHealthUI()
+    {
+        float normalizedHealth = Mathf.Clamp01(health/100);
+        healthBarImage.fillAmount =normalizedHealth;
+        healthBarImage.color = healthGradient.Evaluate(1-normalizedHealth);
+    }
+    void UpdateAmmoUI()
+    {
+        if(weaponHeld && weaponHeld != null)
+        {
+            ammoText.gameObject.SetActive(true);
+            ammoText.text = currentAmmo.ToString();
+        }
+        else
+        {
+            ammoText.gameObject.SetActive(false);
         }
     }
 }

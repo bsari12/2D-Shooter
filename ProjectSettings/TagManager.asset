@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Damage
   - Patrol_Point
+  - PlayerHealth
+  - AmmoTxt
+  - DeathUI
+  - WinUI
   layers:
   - Default
   - TransparentFX
