@@ -78,6 +78,10 @@ public class Enemy : MonoBehaviour
                 Die();
             }
         }
+        else if(collision.gameObject.tag == "Explosion")
+        {
+            Die();
+        }
     }
 
     void Die()

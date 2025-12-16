@@ -6,6 +6,8 @@ public class WeaponSO : ScriptableObject
     public string weaponName;
     public Sprite gunTopDownViewSprite;
     public GameObject groundWeaponPrefab;
+    public GameObject bulletPrefab;
+
     public AudioClip shootingSound;
     [Range(0f,1f)]
     public float moveSpeed;

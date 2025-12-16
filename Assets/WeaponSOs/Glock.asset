@@ -15,6 +15,7 @@ MonoBehaviour:
   weaponName: Glock
   gunTopDownViewSprite: {fileID: 21300000, guid: 24418b442cbdd2547a87fb35fbdd7cc2, type: 3}
   groundWeaponPrefab: {fileID: 6491962961645940548, guid: fdc882e9c2a390342ab62bc6821da10e, type: 3}
+  bulletPrefab: {fileID: 2985669771815229528, guid: e4e55c5fb7bcb37438896f8269ff44be, type: 3}
   shootingSound: {fileID: 8300000, guid: 0a38effcdf3afc24baddea6a0909f05b, type: 3}
   moveSpeed: 0.9
   bloom: 0.5

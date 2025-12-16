@@ -3,6 +3,9 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float speed;
+    public bool explosive;
+    public GameObject explosionbPrefab;
+
     void Start()
     {
         Invoke("DestroySelf", 5f);
@@ -24,6 +27,10 @@ public class Bullet : MonoBehaviour
 
     void DestroySelf()
     {
+        if (explosive)
+        {
+            Instantiate(explosionbPrefab, transform.position, Quaternion.identity);
+        }
         Destroy(gameObject);
     }
 }

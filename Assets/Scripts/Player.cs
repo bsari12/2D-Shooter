@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
     public float health =100f;
     public GameObject deadPlayerPrefab;
     public Transform bulletSpawnPoint;
-    public GameObject bulletPrefab;
+
     public GameObject armObj;
     public SpriteRenderer heldGunSpriteRenderer;
     public GameObject muzzleFlash;
@@ -106,11 +106,17 @@ public class Player : MonoBehaviour
             UpdateHealthUI();
             AudioManager.instance.PlaySFX(hitSFX);
             StartCoroutine(BlinkRed());
-
-            if (health <= 0)
-            {
-                Die();
-            }
+        }
+        else if(collision.gameObject.tag == "Explosion")
+        {
+            health -=25;
+            UpdateHealthUI();
+            AudioManager.instance.PlaySFX(hitSFX);
+            StartCoroutine(BlinkRed());
+        }
+        if (health <= 0)
+        {
+            Die();
         }
     }
     void Die()
@@ -160,7 +166,7 @@ public class Player : MonoBehaviour
                 AudioManager.instance.PlaySFX(weaponHeld.shootingSound,0.2f);
                 Object.FindFirstObjectByType<ScreenShake>().Shake(weaponHeld.screenShakeIntensity,weaponHeld.screenShakeIntensity,0.1f);
 
-                Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletRotation);
+                Instantiate(weaponHeld.bulletPrefab, bulletSpawnPoint.position, bulletRotation);
                 Transform muzzleFlashTransform = Instantiate(muzzleFlash, bulletSpawnPoint.position, bulletRotation, bulletSpawnPoint).transform;
 
                 if(weaponHeld.name == "Ak-47")

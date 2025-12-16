@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ce51f7d46206e94bba6ec06e6f87938, type: 3}
+  m_Name: RPG
+  m_EditorClassIdentifier: 
+  weaponName: RPG
+  gunTopDownViewSprite: {fileID: -7144239700534151294, guid: 3b1cce646515ede41a7f841c3c290497, type: 3}
+  groundWeaponPrefab: {fileID: 6491962961645940548, guid: 3f49cfb8cf620f344978211379349fcb, type: 3}
+  bulletPrefab: {fileID: 3905522975557716017, guid: 88b5a8d91a8a454419b2a7c5f3fcb9d1, type: 3}
+  shootingSound: {fileID: 8300000, guid: c76c64174b0a1514089fa5ec738973dd, type: 3}
+  moveSpeed: 0.6
+  bloom: 0.1
+  fireRate: 2
+  magSize: 1
+  screenShakeIntensity: 6
