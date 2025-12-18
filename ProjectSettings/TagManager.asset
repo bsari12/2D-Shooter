@@ -46,6 +46,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 1833462427
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
@@ -54,6 +57,9 @@ TagManager:
     locked: 0
   - name: player
     uniqueID: 3796811315
+    locked: 0
+  - name: Vehicle
+    uniqueID: 1012244033
     locked: 0
   m_RenderingLayers:
   - Default

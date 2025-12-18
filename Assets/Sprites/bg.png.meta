@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0c0619430c90f1c4a9c5fd7c31a53601
+guid: caf0b4164e4ff4a4096dc3a6a73a54a6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5895777698336186026
-    second: Tank_Body_0
+      213: -4717749261449072705
+    second: Gemini_Generated_Image_3m7ujj3m7ujj3m7u_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Tank_Body_0
+      name: Gemini_Generated_Image_3m7ujj3m7ujj3m7u_0
       rect:
         serializedVersion: 2
-        x: 44
-        y: 124
-        width: 930
-        height: 472
+        x: 0
+        y: 0
+        width: 832
+        height: 832
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6516008ab6dfd2ea0800000000000000
-      internalID: -5895777698336186026
+      spriteID: fbf67fbda00378eb0800000000000000
+      internalID: -4717749261449072705
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Tank_Body_0: -5895777698336186026
+      Gemini_Generated_Image_3m7ujj3m7ujj3m7u_0: -4717749261449072705
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

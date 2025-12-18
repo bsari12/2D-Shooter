@@ -16,6 +16,9 @@ public class Player : MonoBehaviour
     public int kills;
     public GameObject grenade;
 
+    public bool inVehicle;
+    public Transform vehicleTransform;
+
     public float moveSpeed;
     public float health =100f;
     public GameObject deadPlayerPrefab;
@@ -34,7 +37,7 @@ public class Player : MonoBehaviour
     private TextMeshProUGUI ammoText;
     private GameObject deathUI;
     private GameObject winUI;
-
+    private Collider2D playerCollider;
 
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
@@ -47,6 +50,8 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer =GetComponent<SpriteRenderer>();
+        playerCollider = GetComponent<Collider2D>();
+
         StartCoroutine(PlayFootsteps());
 
         healthBarImage =GameObject.FindWithTag("PlayerHealth").GetComponent<Image>();
@@ -58,12 +63,24 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        HandleWinning();
+
+        if(inVehicle)
+        {
+            transform.position = vehicleTransform.position;
+            playerCollider.enabled = false;
+            spriteRenderer.enabled = false;
+            return;
+        }
+        playerCollider.enabled = true;
+        spriteRenderer.enabled = true;
+        
         HandleMovement();
         HandleShooting();
         HandleWeaponEquip();
         HandleReloading();
         HandleDropping();
-        HandleWinning();
+        
         HandleGrenadeThrow();
     }
 
