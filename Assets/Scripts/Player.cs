@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
 
     public int killsToWin = 2;
     public int kills;
-
+    public GameObject grenade;
 
     public float moveSpeed;
     public float health =100f;
@@ -41,6 +41,7 @@ public class Player : MonoBehaviour
 
     private Vector2 moveVelocity;
     private float nextFireTime = 0f;
+    private float lastGrenadeThrow;
 
     void Start()
     {
@@ -63,6 +64,7 @@ public class Player : MonoBehaviour
         HandleReloading();
         HandleDropping();
         HandleWinning();
+        HandleGrenadeThrow();
     }
 
     void FixedUpdate()
@@ -279,7 +281,15 @@ public class Player : MonoBehaviour
         if(kills >= killsToWin)
         {
             winUI.transform.GetChild(0).gameObject.SetActive(true);
-            Time.timeScale = 0;
+            Time.timeScale = 0f;
+        }
+    }
+    void HandleGrenadeThrow()
+    {
+        if(Input.GetKeyDown(KeyCode.G)&& Time.time > lastGrenadeThrow + 2)
+        {
+            Instantiate(grenade, bulletSpawnPoint.position, transform.rotation);
+            lastGrenadeThrow =Time.time;
         }
     }
 }

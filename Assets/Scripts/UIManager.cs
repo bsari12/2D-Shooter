@@ -36,4 +36,5 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f;
         pauseMenu.transform.GetChild(0).gameObject.SetActive(false);
     }
+
 }

@@ -9,7 +9,9 @@ public class DestroyAfterTime : MonoBehaviour
     {
         Invoke("DestroySelf", time);
         if(timeToDestroyCollider !=0)
+        {
             Invoke("DestroyCollider", timeToDestroyCollider);
+        }
     }
 
     // Update is called once per frame

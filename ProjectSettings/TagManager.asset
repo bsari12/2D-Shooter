@@ -11,11 +11,12 @@ TagManager:
   - DeathUI
   - WinUI
   - Explosion
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Landmine
   - Water
   - UI
   - Player

@@ -4,7 +4,7 @@ public class Bullet : MonoBehaviour
 {
     public float speed;
     public bool explosive;
-    public GameObject explosionbPrefab;
+    public GameObject explosionPrefab;
 
     void Start()
     {
@@ -29,7 +29,7 @@ public class Bullet : MonoBehaviour
     {
         if (explosive)
         {
-            Instantiate(explosionbPrefab, transform.position, Quaternion.identity);
+            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         }
         Destroy(gameObject);
     }
